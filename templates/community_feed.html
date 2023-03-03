@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community_feed.css') }}">
+{% endblock %}
+{% block js_scripts %}
+    <script async defer src="{{ url_for('static', filename='js/community_feed.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="pure-g">
+    <div class="pure-u-1-4">
+        <div class="separator"></div>
+        <div id="content-left-large">
+            <div id="filter-feed">
+                <form id="filterForm" class="pure-form pure-form-stacked">
+                    <fieldset>
+                        <div id="advancedFilter">Filter Feed</div>
+                            <div id="filterOptions">
+                                <div id="categoryOptions">
+                                    <span class="pure-form-message">Category:</span>
+                                    <label for="categories1" class="pure-checkbox">
+                                        <input type="checkbox" id="categories1" name="categories1">Sample1
+                                    </label>
+                                    <label for="categories2" class="pure-checkbox">
+                                        <input type="checkbox" id="categories2" name="categories2">Sample2
+                                    </label>
+                                    <label for="categories3" class="pure-checkbox">
+                                        <input type="checkbox" id="categories3" name="categories3">Sample3
+                                    </label>
+                                    <label for="categories4" class="pure-checkbox">
+                                        <input type="checkbox" id="categories4" name="categories4">Sample4
+                                    </label>     
+                                </div>
+                                <div id="subcategoryOptions">
+                                    <span class="pure-form-message">Sub-Category:</span>
+                                    <label for="sub-categories1" class="pure-checkbox">
+                                        <input type="checkbox" id="sub-categories1" name="sub-categories1">Sample1
+                                    </label>
+                                    <label for="sub-categories2" class="pure-checkbox">
+                                        <input type="checkbox" id="sub-categories2" name="sub-categories2">Sample2
+                                    </label>
+                                    <label for="sub-categories3" class="pure-checkbox">
+                                        <input type="checkbox" id="sub-categories3" name="sub-categories3">Sample3
+                                    </label>
+                                    <label for="sub-categories4" class="pure-checkbox">
+                                        <input type="checkbox" id="sub-categories4" name="sub-categories4">Sample4
+                                    </label>     
+                                </div>
+                                <div id="characterOptions">
+                                    <span class="pure-form-message">Characters:</span>
+                                    <label for="characters1" class="pure-checkbox">
+                                        <input type="checkbox" id="characters1" name="characters1">Sample1
+                                    </label>
+                                    <label for="characters2" class="pure-checkbox">
+                                        <input type="checkbox" id="characters2" name="characters2">Sample2
+                                    </label>
+                                    <label for="character3" class="pure-checkbox">
+                                        <input type="checkbox" id="character3" name="character3">Sample3
+                                    </label>
+                                    <label for="character4" class="pure-checkbox">
+                                        <input type="checkbox" id="character4" name="character4">Sample4
+                                    </label>     
+                                </div>
+                                <div id="gameOptions">
+                                    <span class="pure-form-message">Games:</span>
+                                    <label for="game1" class="pure-checkbox">
+                                        <input type="checkbox" id="game1" name="game1">Sample1
+                                    </label>
+                                    <label for="game2" class="pure-checkbox">
+                                        <input type="checkbox" id="game2" name="game2">Sample2
+                                    </label>
+                                    <label for="game3" class="pure-checkbox">
+                                        <input type="checkbox" id="game3" name="game3">Sample3
+                                    </label>
+                                    <label for="game4" class="pure-checkbox">
+                                        <input type="checkbox" id="game4" name="game4">Sample4
+                                    </label>     
+                                </div>
+                                <button class="pure-button pure-button-primary">Apply Filters</button>
+                            </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div id="followers-toggle">
+                <p>Followers Only</p>
+                <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
+            </div>
+        </div>
+    </div>
+    <div class="pure-u-1-2">
+        <div class="separator"></div>
+        {% if session.get("user") %}
+            <div id="content-left-large">
+                <div class="pure-g">
+                    <div class="pure-u-1-4">
+                        <img id="discussion-avatar" class="pure-img" src="{{data.user_img}}" alt="Avatar">
+                    </div>
+                    <div class="pure-u-1-2">
+                        <h4>Whats on your mind, {{session["user"]["userinfo"]["name"]}}?</h4>
+                    </div>
+                    <div class="pure-u-1-4">
+                        <div id="makePost">
+                            <a class="pure-button" id="create-discussion">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </a>
+                        </div>
+                    </div> 
+                    <div class="pure-u-1">
+                        <div id="postDicussionDiv">
+                            <form id="discussionForm" class="pure-form" action="/community/discussion/create" method="post">
+                                <fieldset>
+                                    <div id="discussionTitle">
+                                        <label for="stacked-title">Title: </label>
+                                        <input type="text" name="title" id="stacked-title" placeholder="Title" required maxlength="64"/>
+                                    </div>
+                                    <div id="postFilter">
+                                        <label for="stacked-cat">Posting in Forum: </label>
+                                            <select name="category" id="stacked-category" required>
+                                                <option value="">Select Category</option>
+                                                {% for category in data.categories %}
+                                                <option value={{category[0]}}>{{category[0]}}</option>
+                                                {% endfor %}
+                                            </select>
+                                    </div>
+                                    <div class="editor-container">
+                                        <div id="editor">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="content" id="discussionData">
+                                    <div id="cancelPost-container">
+                                            <button id="cancel-post" type="button" class="pure-button">Cancel</button>
+                                            <button class="pure-button pure-button-primary">Submit Post</button>
+                                    </div>    
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div id="content-left-large">
+                <h4>Please login to make a post</h4>
+            </div>
+        {% endif %}
+        <div class="separator"></div>
+        {% for recent_post in data.recent_posts %}
+        <div id="content-left-large">
+            <div id="post">
+                <h2><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[8]) }}">{{recent_post[0]}}</a></h2>
+                <div id="author">
+                    <div class="pure-g">
+                        <div class="pure-u-1-9">
+                            <img id="avatar_img" class="pure-img" src="{{recent_post[6]}}" alt="Avatar">
+            
+                        </div>
+                        <div class="pure-u-1-9">
+                            <h4 id="author_name">{{recent_post[5]}}</h4>
+                        </div>
+                        <div class="pure-u-1-9">
+                            <p id="post_date">• {{recent_post[3]}}</p>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="post-content">
+                    {{recent_post[1]|safe}} 
+                    <!-- this feels very much not safe, can we trust the html in our database?? -->
+                </div>
+                
+                <i id="like_button_{{recent_post[8]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+                <div class="button_like" data-id="{{recent_post[8]}}"></div>
+                <a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=recent_post[8]) }}"><i id="comment_button" class="fa-regular fa-comment fa-lg"></i>&nbsp;&nbsp;&nbsp;{{recent_post[7]}}</a>
+            </div>
+        </div>
+        <div class="separator"></div>
+        {% endfor %}
+        <div class="page-buttons">
+        <h4>Page {{data.page + 1}}</h4>
+        {% if data.page > 0 %}
+        <a id="left-page-button" href="?page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+        {% else %}
+        <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+        {% endif %}
+
+        {% if data.page < data.page_count-1 %}
+        <a id = "right-page-button" href="?page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+        {% else %}
+        <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+        {% endif %}
+        </div>
+    </div>
+    <div class="pure-u-1-4">
+    <div class="separator"></div>
+    <div id="content-right">
+      <h2>Community Activity</h2>
+      <div id="category-activity-div">
+        <h4>Games</h4>
+        <span><i class="fa-regular fa-comments"></i> {{data.games_category_count}} Posts • New Reply {{data.recent_games[3]}} ago</span>
+        <h4>Character</h4>
+        <span><i class="fa-regular fa-comments"></i> {{data.character_category_count}} Posts • New Reply {{data.recent_character[3]}} ago</span>
+        <h4>Content</h4>
+        <span><i class="fa-regular fa-comments"></i> {{data.content_category_count}} Posts • New Reply {{data.recent_content[3]}} ago</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

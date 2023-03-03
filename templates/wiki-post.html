@@ -1,0 +1,45 @@
+{% extends "base_leftbar.html" %}
+
+{% block title %}
+    {{ data.title }}
+{% endblock %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/wiki-post.css') }}">
+{% endblock %}
+
+{% block left_content %}
+    <div class="left-menu">
+        <a id="main_link" href="#{{ data.title }}">{{ data.title }}</a>
+        <ol class="contents_links">
+        {% for header in data.headers %}
+            <li><a href="#{{ header['h2'][1] }}">{{ header['h2'][0] }}</a></li>
+            <ol class="contents_links">
+            {% for h3 in header['h3s'] %}
+                <li><a href="#{{ h3['h3'][1] }}">{{ h3['h3'][0] }}</a></li>
+                <ol class="contents_links">
+                    {% for h4 in h3['h4s'] %}
+                        <li><a href="#{{ h4[1] }}">{{ h4[0] }}</a></li>
+                    {% endfor %}
+                </ol>
+            {% endfor %}
+            </ol>
+        {% endfor %}
+        </ol>
+    </div>
+{% endblock %}
+
+{% block main_content %}
+<div id="main-wiki" class="ql-editor">
+    <div class="wiki-title">
+        <h1 id="{{ data.title }}">{{ data.title }}</h1>
+        <h4>@{{ data.author }}</h4>
+        <h4>{{ data.category }}</h4>
+        <h4>{{ data.date }}</h4>
+        <hr>
+    </div>
+    <p class="content_paragraph">
+        {{ data.content | safe }}
+    </p>
+</div>
+{% endblock %}

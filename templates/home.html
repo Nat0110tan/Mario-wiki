@@ -1,0 +1,72 @@
+{% extends "base_multibar.html" %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+    <script async defer src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block main_content %}
+{% for recent_post in data.recent_posts %}
+{% set post_link = data.post_url + recent_post[2].lower() + "/?page=" + recent_post[0] %}
+<div class="post ql-editor">
+
+<h2 class="post_title"><a class=hidden-link-button href='{{post_link}}'>{{recent_post[0]}}</a></h2>
+<!-- <h2 class="post_title"><a href="{{ url_for('create_post.detail', post_id=recent_post[8]) }}">{{recent_post[0]}}</a></h2> -->
+    <div class="author">
+        <div class="pure-g">
+            <div class="pure-u-1-9">
+                <img class="avatar_img pure-img" src="{{recent_post[6]}}" alt="Avatar">
+
+            </div>
+            <div class="pure-u-1-9">
+                <h4 class="author_name">{{recent_post[5]}}</h4>
+            </div>
+            <div class="pure-u-1-9">
+                <p class="post_date">• {{recent_post[3]}}</p>
+            </div>
+        </div>
+    
+    </div>
+    <div class="post-content">
+        {{recent_post[1]|safe}} 
+        <!-- this feels very much not safe, can we trust the html in our database?? -->
+    </div>
+    
+    <i id="like_button_{{recent_post[8]}}" class="like_button fa-regular fa-heart fa-lg"></i>
+    <div class="button_like" data-id="{{recent_post[8]}}"></div>
+    <div id="read-more-button">
+        <a class=hidden-link-button href='{{post_link}}'><button class="pure-button">Read More</button></a>
+    </div>
+</div>
+<div class="separator"></div>
+{% endfor %}
+<h4>Page {{data.page + 1}}</h4>
+<div class="page-buttons">
+{% if data.page > 0 %}
+<a id="left-page-button" href="?page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+{% else %}
+<a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+{% endif %}
+
+{% if data.page < data.page_count-1 %}
+<a id = "right-page-button" href="?page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+{% else %}
+<a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% block right_content %}
+    <h2>Trending Tags</h2>
+    {% for trending_tag in data.trending_tags %}
+    <div class="trending-tag-section">
+        <a href="/categories/{{trending_tag[2].lower()}}/{{trending_tag[0].lower()}}"><button class="pure-button"># {{trending_tag[0]}}</button></a> <p class="trending-tag-text"> {{trending_tag[1]}} posts <span class="trending-tag-cat">in {{trending_tag[2]}}<span></p>
+    </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,141 @@
+.pic{
+  display: inline-block;
+  padding: 0.5em;
+  background: linear-gradient(130deg, #b0ff74, #a003fb);
+  margin: auto;
+  border-radius: 50%;
+  background-size: 200% 200%;
+  animation: animated-gradient 1.5s linear infinite;
+}
+
+@keyframes animated-gradient{
+  25%{
+    background-position: left bottom;
+  }
+  50%{
+    background-position: right bottom;
+  }
+  75%{
+    background-position: right top;
+  }
+  100%{
+    background-position: left top;
+  }
+}
+
+.pic img{
+  display: block;
+  width: 6.25em;
+  height: 6.25em;
+  border-radius: 50%;
+}
+
+.username{
+  color:#d2691e;
+  font-size: 1.75em;
+  font-weight: 600;
+  margin: 0.5em;
+  
+}
+
+.userpos{
+  color:#c3961c;
+  font-size: 1.15em;
+  font-weight: 600;
+  margin: 0.5em;
+  
+}
+
+.userbio{
+  font-size: 1.125em;
+  margin: 0.1em;
+  width: 100%
+}
+
+div#profile_posts {
+  height: 100%;
+  margin: auto;
+}
+
+.blog {
+  margin: auto;
+  text-align: center;
+  margin: 0.5em;
+  justify-content: center;
+  align-items: center;
+}
+
+.userinfo{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-success{
+  margin: 0.4em;
+}
+.postbar{
+  max-width: 100%;
+}
+
+.fans{
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.fan {
+  margin-left: 1em;
+}
+
+.content-right-large.activities {
+  padding-bottom: 8px;
+}
+
+/* #content-right-large h2 {
+  padding-bottom: 8px;
+  background-color: white;
+} */
+
+.main_post_div {
+  height: 100%;
+}
+
+.update-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div#update-form{
+  justify-content: center;
+  align-items: center;
+}
+
+form#upload-form{
+  width: 80%;
+  margin: auto;
+}
+
+a#left-page-button, a#left-page-button:hover, a#left-page-button:focus, a#left-page-button:active, 
+a#right-page-button, a#right-page-button:hover, a#right-page-button:focus, a#right-page-button:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+#left-page-button {
+  position: relative;
+  right: 2.1em;
+  top: -2.4em;
+}
+
+#right-page-button {
+  position: relative;
+  left: 2.1em;
+  top: -2.4em;
+}
+
+div.page-buttons {
+  text-align: center;
+}

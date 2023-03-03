@@ -1,0 +1,114 @@
+{% extends "base_leftbar.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+  <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+  <div id="searchDiv">
+    <div>
+      <h1>Search!</h1>
+    </div>
+    <form method="get" action="/search/results" id="searchForm" class="pure-form pure-form-stacked">
+      <fieldset>
+        <div id="searchBar">
+          <label for="search_query">
+            <input required type="text" class="pure-input-rounded" id="search_query" name="search_query" placeholder="Search" value="{{ data.query }}">
+          </label>
+        </div>
+        <br>
+        <button type="submit" class="pure-button pure-button-primary">Search</button>
+      </fieldset>
+    </form>
+  </div>
+  {% if data %}
+    <div id="searchResults">
+      <h2 id="result_header">Showing Results for <em>{{ data.query }}</em></h2>
+      <div class="pure-g">
+        <div class="pure-u-1 pure-u-lg-1-4 search_filters">
+          <div class="separator"></div>
+          <div id="content-left">
+            <div class="pure-menu">
+              <span class="pure-menu-heading">Post Types</span>
+              <ul class="pure-menu-list">
+                <li class="search_links pure-menu-item">
+                  <a href="?search_query={{data.query}}" class="pure-menu-link">All Posts</a>
+                </li>
+                <li class="search_links pure-menu-item">
+                  <a href="?search_query={{data.query}}&post_type=post" class="pure-menu-link">Wiki Pages</a>
+                </li>
+                <li class="search_links pure-menu-item">
+                  <a href="?search_query={{data.query}}&post_type=discussion" class="pure-menu-link">Discussion Posts</a>
+                </li>
+                <!-- <li class="search_links pure-menu-item">
+                  <a href="#" class="pure-menu-link">User Profiles</a>
+                </li> -->
+              </ul>
+            </div>
+            <div class="separator"></div>
+            <div class="pure-menu">
+              <span class="pure-menu-heading">Categories</span>
+              <ul class="pure-menu-list">
+                <li class="search_links pure-menu-item">
+                  <a href="#" class="pure-menu-link">Characters</a>
+                </li>
+                <li class="search_links pure-menu-item">
+                  <a href="#" class="pure-menu-link">Games</a>
+                </li>
+                <li class="search_links pure-menu-item">
+                  <a href="#" class="pure-menu-link">Content</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="pure-u-1 pure-u-lg-3-4 search_results">
+          <div class="separator"></div>
+          {% for result in data.search_results %}
+            {% set post_link = data.post_url + result.category.lower() + "/?page=" + result.title %}
+            <div class="search_result post ql-editor">
+              {% if data.post_type == "POST" %}
+                <h2 class="post_title"><a class="hidden-link-button" href="{{ post_link }}">{{ result.title }}</a></h2>
+              {% else %}
+                <h2 class="post_title"><a class="hidden-link-button" href="{{ url_for('create_post.detail', post_id=result.id) }}">{{ result.title }}</a></h2>
+              {% endif %}
+              <div class="post-content">
+                {{ result.raw_text }}
+              </div>
+            </div>
+            <div class="separator"></div>
+          {% endfor %}
+
+          <h4 id="page_header">Page {{ data.page + 1 }}</h4>
+          <div class="page-buttons">
+            {% if data.page > 0 %}
+              <a id="left-page-button" href="?search_query={{data.query}}&post_type={{data.post_type}}&page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+            {% else %}
+              <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+            {% endif %}
+
+            {% if data.page < data.page_count-1 %}
+              <a id="right-page-button" href="?search_query={{data.query}}&post_type={{data.post_type}}&page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+            {% else %}
+              <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+            {% endif %}
+          </div>
+
+          <!-- <div class="content-right-large">
+          <span>Add some more content here when we start adding the database</span>
+          <br>
+          <span>This would be hidden until after a search has been performed</span>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

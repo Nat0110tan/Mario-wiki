@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block css_links %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block js_scripts %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
+
+{% block title %}profile{% endblock %}
+
+{% block header %}
+  <h1>{{data.user_name}}, welcome back!</h1>
+{% endblock %}
+
+
+{% block content %}
+<div class="pure-g">
+<div class="pure-u-1-5">
+  <div id="content-left">
+    <div class="blog">
+      <div class="pic">
+        <img src="{{ data.user_img }}" alt="User Image">
+      </div>
+      <div class="pure-g" id="upload-img">
+        <form action="/profile/upload" method="POST" enctype="multipart/form-data" id="upload-form" style="display: none;">
+          <label for="photo">Upload a new profile picture:</label>
+          <input type="file" name="photo" accept="image/*">
+          <button type="submit">Upload Photo</button>
+        </form>
+      </div>
+      <div class="pure-g userinfo">
+        <div class="username">{{ data.user_name }}</div>
+        <div class="userpos">{{ data.user_post}} posts | {{data.user_fan}} followers</div>
+        <div class="userbio">{{ data.user_bio | safe}}</div>
+        <button class="button-success pure-button update" id="update-btn">Update</button>
+        <form action="/profile" method="POST" enctype="multipart/form-data" id="update-form" style="display: none;">
+          <div id="editor-text">
+          </div>
+          <input type="hidden" name="content" id="postData">
+          <button class="button-success pure-button decline" id="decline-btn">Decline</button>
+          <button type="submit" class="button-success pure-button" id="submit-btn">Submit</button>
+        </form>
+      </div>
+  </div>
+  </div>
+</div>
+
+
+<div class="pure-u-3-5">
+  <div class="content-right-large activities postbar">
+    <h2>Your activities</h2>
+  </div>
+  <div class="separator"></div>
+  <div class="content-right-large postbar">
+    <div class="main_post_div pure-group">
+      <div class="pure-u-1-9" id="profile_posts">
+        <div id="content">
+          {% for recent_post in data.recent_posts %}
+          {% set post_link = post_url + recent_post[2].lower() + "/?page=" + recent_post[0] %}
+            <div class="post ql-editor">
+              <h2 class="post_title"><a class=hidden-link-button href='{{post_link}}'>{{recent_post[0]}}</a></h2>
+              <div class="author">
+                <div class="pure-g">
+                  <div class="pure-u-1-9">
+                    <img class="avatar_img pure-img" src="{{recent_post[6]}}" alt="Avatar">
+                  </div>
+                  <div class="pure-u-1-9">
+                    <h4 class="author_name">{{recent_post[5]}}</h4>
+                  </div>
+                  <div class="pure-u-1-9">
+                    <p class="post_date">• {{recent_post[3]}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="post-content">
+                {{recent_post[1]|safe}} 
+                <!-- this feels very much not safe, can we trust the html in our database?? -->
+              </div>
+            
+              <h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{recent_post[4]}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{recent_post[7]}}</h4>
+              <div class="button_like">
+                <i class="like_button fa-regular fa-heart"></i>
+                <a class=hidden-link-button href='{{post_link}}'><i class="comment_button fa-regular fa-comment"></i></a>
+              </div>
+            </div>
+            <div class="separator"></div>
+          {% endfor %}
+          {% for recent_discussion in data.recent_discussions %}
+            <div class="post ql-editor">
+              <h2 class="post_title"><a class=hidden-link-button href="{{ url_for('create_post.detail', post_id=recent_discussion[8]) }}">{{recent_discussion[0]}}</a></h2>
+              <div class="author">
+                <div class="pure-g">
+                  <div class="pure-u-1-9">
+                    <img class="avatar_img pure-img" src="{{recent_discussion[6]}}" alt="Avatar">
+                  </div>
+                  <div class="pure-u-1-9">
+                    <h4 class="author_name">{{recent_discussion[5]}}</h4>
+                  </div>
+                  <div class="pure-u-1-9">
+                    <p class="post_date">• {{recent_discussion[3]}}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="post-content">
+                {{recent_discussion[1]|safe}} 
+                <!-- this feels very much not safe, can we trust the html in our database?? -->
+              </div>
+            
+              <h4> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{recent_discussion[4]}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{recent_discussion[7]}}</h4>
+              <div class="button_like">
+                <i class="like_button fa-regular fa-heart"></i>
+                <a class=hidden-link-button href="{{ url_for('create_post.detail', post_id=recent_discussion[8]) }}"><i class="comment_button fa-regular fa-comment"></i></a>
+              </div>
+            </div>
+            <div class="separator"></div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-buttons">
+    <h4>Page {{data.page + 1}}</h4>
+    {% if data.page > 0 %}
+    <a id="left-page-button" href="?page={{data.page-1}}"><i class="fa-solid fa-square-caret-left fa-lg"></i></a>
+    {% else %}
+    <a id="left-page-button"><i class="fa-regular fa-square-caret-left fa-lg"></i></a>
+    {% endif %}
+
+    {% if data.page < data.page_count-1 %}
+    <a id = "right-page-button" href="?page={{data.page+1}}"><i class="fa-solid fa-square-caret-right fa-lg"></i></a>
+    {% else %}
+    <a id="right-page-button"><i class="fa-regular fa-square-caret-right fa-lg"></i></a>
+    {% endif %}
+    </div>
+</div>
+
+<div class="pure-u-1-5">
+  <div id="content-right">
+    <h2>Followers</h2>
+    <div class="fans pure-g">
+      <div class="fan pure-g">
+        <img class="avatar_img fan-img pure-img" src="https://mariopartylegacy.com/wp-content/uploads/2011/08/luigiprofile.png" alt="Avatar">
+        <h4>No.1 fan</h4>
+        <button type="submit" class="button-success pure-button remove">Remove</button>
+      </div>
+      <div class="fan pure-g">
+        <img class="avatar_img fan-img pure-img" src="https://mariopartylegacy.com/wp-content/uploads/2011/08/warioprofile-275x275.png" alt="Avatar">
+        <h4>No.2 fan</h4>
+        <button type="submit" class="button-success pure-button remove">Remove</button>
+      </div>
+      <div class="fan pure-g">
+        <img class="avatar_img fan-img pure-img" src="https://mariopartylegacy.com/wp-content/uploads/2011/08/yoshiprofile-275x275.png" alt="Avatar">
+        <h4>No.3 fan</h4>
+        <button type="submit" class="button-success pure-button remove">Remove</button>
+      </div>
+  </div>
+  </div>
+</div>
+</div>
+<div class="separator"></div>
+{% endblock %}

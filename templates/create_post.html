@@ -1,0 +1,47 @@
+{% extends "base_rightbar.html" %}
+
+{% block css_links %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/create_post.css') }}">
+{% endblock %}
+{% block js_scripts %}
+    <script src="{{ url_for('static', filename='js/create_post.js') }}"></script>
+{% endblock %}
+
+
+{% block main_content %}
+<div class="left">
+    <h2>Create Post</h2>
+</div>
+<br>
+
+<form id="postForm" class="pure-form" method="post">
+    <div id="post-title">
+    <fieldset>
+        <input type="text" name="title" placeholder="Title" class="pure-input-1" required maxlength="64"/>
+    </fieldset>
+</div>
+
+
+<div class="editor-container">
+    <div id="editor">
+    </div>
+</div>
+<input type="hidden" name="content" id="postData">
+
+<div class="pure-form-stacked" id="category">
+<label for="stacked-state">Posting in Mario Wiki:</label>
+        <select name="category" id="stacked-category" required>
+            <option value="">Select Category</option>
+            {% for category in data.categories %}
+            <option value={{category[0]}}>{{category[0]}}</option>
+            {% endfor %}
+        </select>
+</div>
+
+<button class="pure-button" onclick="redirectHome()" type='button'>Cancel</button>
+<button class="pure-button pure-button-primary" type='submit'>Create Post</button>
+</form>
+
+
+
+{% endblock %}

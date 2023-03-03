@@ -1,0 +1,46 @@
+div#category_content {
+  margin-left: 4%;
+  width: 96%;
+  padding-top: 0.5em;
+  text-align:left;
+}
+
+div#trending_div {
+  margin: auto;
+  text-align: center;
+}
+
+div.trending_content {
+  margin-left: 1%;
+  margin-right: 1%;
+  font-weight: 600;
+}
+
+li.contributors {
+  text-align: left;
+}
+
+img.trending_img {
+  width: auto;
+  height: 70%;
+  max-width: 10em;
+  object-fit: scale-down;
+}
+
+div#div {
+  height: 12.5em;
+  max-width: 12.5em;
+}
+
+/* div#see_also_div {
+  margin-left: 2em;
+} */
+
+li.see_also {
+  font-size: x-large;
+  margin-bottom: 0.5em;
+}
+
+h2#see_also_head {
+  border-bottom: 1px solid;
+}

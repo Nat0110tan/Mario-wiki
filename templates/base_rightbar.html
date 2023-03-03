@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pure-g">
+    <div class="pure-u-3-4">
+      <div class="separator"></div>
+      <div id="content-left-large">
+      {% block main_content %}
+      <h2>Sample Heading</h2>
+      {% endblock %}
+    </div>
+    </div>
+    <div class="pure-u-1-4">
+      <div class="separator"></div>
+      <div id="content-right">
+        {% block right_content %}
+        <h2>Sample Sidebar</h2>
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

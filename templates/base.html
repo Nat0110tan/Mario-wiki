@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/baseStyle.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
+    <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% block css_links %}{% endblock %}
+    
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://kit.fontawesome.com/31f1566f16.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+    {% block js_scripts %}{% endblock %}
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+  </head>
+  <body>
+    <div class="pure-g" id="loginNavBar">
+      <nav id="normalLoginBar" class="pure-menu pure-menu-horizontal pure-u-3-4">
+        {% if session.get("user") != None %}
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/profile" class="pure-menu-link"> {{session["user"]["userinfo"]["name"]}}</a>
+            <ul class="pure-menu-children" id="loginBar">
+              <li class="pure-menu-item dropdown_links">
+                <a href="/profile" class="pure-menu-link">Profile</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/post/create" class="pure-menu-link">New Post</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/logout" class="pure-menu-link">Logout</a>
+              </li>
+            </ul>
+          </li>
+        
+      {% else %}
+        <li class="pure-menu-item">
+          <a href="/login" class="pure-menu-link"><i class="fa-solid fa-user"></i> Log in / Sign up</a>
+        </li>
+        {% endif %}
+      </nav>
+    </div>
+
+    <div class="pure-g" id="topNavBar">
+      <div id="logo" class="pure-u-3-24">
+        <img src="{{ url_for('static', filename='images/mario_logo.png') }}" alt="Mario Wiki">
+      </div>
+      <nav id="normalNavBar" class="pure-menu pure-menu-horizontal pure-u-3-4">
+        <ul class="pure-menu-list">
+          <li class="pure-menu-item">
+            <a href="/" class="pure-menu-link"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/characters" class="pure-menu-link"><i class="fa-solid fa-ghost"></i> Characters</a>
+            <ul class="pure-menu-children">
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/characters/heroes" class="pure-menu-link">Heroes</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/characters/enemies" class="pure-menu-link">Enemies</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/characters/species" class="pure-menu-link">Species</a>
+              </li>
+            </ul>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/games" class="pure-menu-link"><i class="fa-solid fa-gamepad"></i> Games</a>
+            <ul class="pure-menu-children">
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/games/super_mario_bros" class="pure-menu-link">Super Mario Bros Series</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/games/mario_kart" class="pure-menu-link">Mario Kart Series</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/games/mario_party" class="pure-menu-link">Mario Party Series</a>
+              </li>
+            </ul>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="/categories/content" class="pure-menu-link"><i class="fa-solid fa-flag"></i> Content</a>
+            <ul class="pure-menu-children">
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/content/locations" class="pure-menu-link">Locations</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/content/items" class="pure-menu-link">Items</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/categories/content/karts" class="pure-menu-link">Karts</a>
+              </li>
+            </ul>
+          </li>
+          <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="#" class="pure-menu-link"><i class="fa-solid fa-user-group"></i> Community</a>
+            <ul class="pure-menu-children">
+              <li class="pure-menu-item dropdown_links">
+                <a href="/community" class="pure-menu-link">Feed</a>
+              </li>
+              <li class="pure-menu-item dropdown_links">
+                <a href="/users" class="pure-menu-link">Users</a>
+              </li>
+            </ul>
+          </li>
+          <li class="pure-menu-item">
+            <a href="/search" class="pure-menu-link"><i class="fa-solid fa-magnifying-glass"></i></a>
+          </li>
+        
+        </ul>
+      </nav>
+      <div id="hamburger" class="pure-u-3-24">
+        <i id="ham" class="fa fa-bars"></i>
+      </div>
+    </div>
+
+    <nav id="hamburgerNavBar" class="pure-menu custom-restricted-width">
+      <ul class="pure-menu-list" id="hamburger_list">
+        <li class="pure-menu-item">
+          <a href="/" class="pure-menu-link"><i class="fa-solid fa-house"></i> Home</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/characters" class="pure-menu-link"><i class="fa-solid fa-ghost"></i> Characters</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/games" class="pure-menu-link"><i class="fa-solid fa-gamepad"></i> Games</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/categories/content" class="pure-menu-link"><i class="fa-solid fa-flag"></i> Content</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/community" class="pure-menu-link"><i class="fa-solid fa-user-group"></i> Community Feed</a>
+        </li>
+        <li class="pure-menu-item">
+          <a href="/search" class="pure-menu-link"><i class="fa-solid fa-magnifying-glass"></i> Search</a>
+        </li>
+      </ul>
+    </nav>
+
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% block content %}{% endblock %}
+    <footer id="footer">
+      <h2>Browse A-Z</h2>
+      <p>Add some more content here when we start adding the database</p>
+      <!-- Do something with the subtopics when we start using the database -->
+    </footer>
+  </body>
+</html>
